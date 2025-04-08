@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SharedDataSet xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <DataSet Name="DataSet1">
+    <Query>
+      <DataSourceReference>DataSource1</DataSourceReference>
+      <CommandText>SELECT
+    e.Id AS EditorId, 
+    e.FirstName +' '+e.LastName AS EditorName,
+	R.Name AS RoleName,
+    e.ManagedBy, 
+    m.FirstName +' '+m.LastName AS ManagerName,
+	P.Id AS PostId,
+	P.Title AS PostTitle,
+	STRING_AGG(C.Name, ' | ') Category,
+	STRING_AGG(SC.Name, ', ') SubCategory,
+                PS.Id AS PublishStatusId,
+	PS.Name AS PublishStatus,
+	P.CreatedAt PostCreationTime
+FROM Posting.Editor E
+LEFT JOIN Posting.Editor m ON e.ManagedBy = m.Id
+JOIN Posting.Role R ON E.RoleId=R.Id
+JOIN Posting.Post P ON P.EditorId=E.Id
+JOIN Posting.PublishStatus PS ON PS.Id=P.PublishStatusId
+JOIN Posting.PostCategory PC ON PC.PostId=P.Id
+JOIN Posting.SubCategory SC ON SC.Id=PC.SubCategoryId
+JOIN Posting.Category C ON C.Id=SC.CategoryId
+WHERE 
+	E.IsDeleted=0
+	OR P.IsDeleted=0
+GROUP BY 
+	E.Id, 
+	E.FirstName, 
+	E.LastName, 
+	P.CreatedAt,
+	R.Name,
+	E.ManagedBy,
+	M.FirstName,
+	M.LastName,
+	P.Id,
+	P.Title,
+	PS.Name,
+                PS.Id,
+	P.CreatedAt
+ORDER BY 
+	P.CreatedAt DESC;</CommandText>
+    </Query>
+    <Fields>
+      <Field Name="EditorId">
+        <DataField>EditorId</DataField>
+        <rd:TypeName>System.Int32</rd:TypeName>
+      </Field>
+      <Field Name="EditorName">
+        <DataField>EditorName</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="ManagedBy">
+        <DataField>ManagedBy</DataField>
+        <rd:TypeName>System.Int32</rd:TypeName>
+      </Field>
+      <Field Name="RoleName">
+        <DataField>RoleName</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="ManagerName">
+        <DataField>ManagerName</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="PostId">
+        <DataField>PostId</DataField>
+        <rd:TypeName>System.Int32</rd:TypeName>
+      </Field>
+      <Field Name="PostTitle">
+        <DataField>PostTitle</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="Category">
+        <DataField>Category</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="PublishStatus">
+        <DataField>PublishStatus</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="SubCategory">
+        <DataField>SubCategory</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="PublishStatusId">
+        <DataField>PublishStatusId</DataField>
+        <rd:TypeName>System.Int32</rd:TypeName>
+      </Field>
+      <Field Name="PostCreationTime">
+        <DataField>PostCreationTime</DataField>
+        <rd:TypeName>System.DateTime</rd:TypeName>
+      </Field>
+    </Fields>
+  </DataSet>
+</SharedDataSet>

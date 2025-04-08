@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SharedDataSet xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <DataSet Name="DataSet1">
+    <Query>
+      <DataSourceReference>DataSource1</DataSourceReference>
+      <CommandText>SELECT
+    e.Id AS EditorId, 
+    e.FirstName +' '+e.LastName AS EditorName,
+	R.Name AS RoleName,
+    e.ManagedBy, 
+    m.FirstName +' '+m.LastName AS ManagerName
+FROM Posting.Editor E
+LEFT JOIN Posting.Editor m ON e.ManagedBy = m.Id
+JOIN Posting.Role R ON E.RoleId=R.Id
+WHERE 
+	E.IsDeleted=0;</CommandText>
+    </Query>
+    <Fields>
+      <Field Name="EditorId">
+        <DataField>EditorId</DataField>
+        <rd:TypeName>System.Int32</rd:TypeName>
+      </Field>
+      <Field Name="EditorName">
+        <DataField>EditorName</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="RoleName">
+        <DataField>RoleName</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="ManagedBy">
+        <DataField>ManagedBy</DataField>
+        <rd:TypeName>System.Int32</rd:TypeName>
+      </Field>
+      <Field Name="ManagerName">
+        <DataField>ManagerName</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+    </Fields>
+  </DataSet>
+</SharedDataSet>
